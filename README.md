@@ -5,6 +5,7 @@ Ansible playbooks for automating the setup and use of laptop devices.
 ## Usage
 
 ```shell
+% ansible-playbook --check -s site.yml
 % ansible-playbook -s site.yml
 ```
 
@@ -20,6 +21,7 @@ sudo pkg install sysutils/ansible
 
 ```shell
 % ansible -m setup -s localhost
+% ansible -vvv -m setup -s localhost
 ```
 
 ## TODO
@@ -33,3 +35,4 @@ sudo pkg install sysutils/ansible
 * Switch from using `library/sysrc` to lineinfile for sysrc-style updates.
 * Improve `library/kld` to not return changed when a module is already
   loaded.
+* Figure out a different way to query the hardware without `dmidecode`
