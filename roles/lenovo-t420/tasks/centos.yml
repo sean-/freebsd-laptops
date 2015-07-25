@@ -1,0 +1,4 @@
+---
+- name: Wrong
+  fail: msg="Whoops"
+  

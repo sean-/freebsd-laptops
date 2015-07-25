@@ -1,0 +1,82 @@
+#!{{ ansible_python_interpreter }} --
+
+import getopt
+import json
+import re
+import string
+import socket
+import subprocess
+import struct
+import sys
+
+cli_args = {}
+dmidecode_facts = {}
+dmidecode_version_semver = { 'major': 0, 'minor': 0, 'micro': 0}
+
+FLAG_RE = '^(?P<leading_whitespace>[\s]+)(?P<flag_name>[^\:]+):$'
+
+def dump_facts(facts):
+    print json.dumps(facts, sort_keys=True, indent=4, separators=(',', ': '))
+
+def get_dmidecode_facts(version):
+    if not (version['major'] == 2 and version['minor'] == 12):
+        raise Exception('Unsupported version of dmidecode: %d.%d.%d' % (version['major'], version['minor'], version['micro']))
+    out = subprocess.check_output(['/usr/local/sbin/dmidecode', '-q'])
+
+    def init_type_facts():
+        return ('',{}, None, 0, None)
+    type_name, type_facts, type_flags, indent_level, flag_name = init_type_facts()
+
+    # Abuse the format output from dmidecode -q and rely on two things:
+    #
+    # 1) if line[0] is newline, skip to next section
+    #
+    # 2) if line[0] is a non-whitespace character, it's the start of a
+    # new type
+    #
+    # 3) if line[0] is a whitespace character, it's information part
+    # of a subtype
+    for line in out.splitlines():
+        if line == '':
+            dmidecode_facts[type_name] = type_facts
+            type_name, type_facts, type_flags, indent_level, flag_name = init_type_facts()
+        elif line[0].isalnum():
+            type_name = re.sub('[\s]+', '_', line.strip().lower())
+        else:
+            if type_flags is not None:
+                # Appending flags to a value.  Continue appending
+                # until the indent levels are the same
+                md = re.match('^([\s]+)', line)
+                if md is not None and len(md.group(1)) != indent_level:
+                    type_flags.append(line.strip())
+                else:
+                    type_facts[type_name] = type_flags
+                    type_flags = None
+            elif line[-1] == ':':
+                md = re.match(FLAG_RE, line)
+                if md is None:
+                    raise Exception("unable to match flag name: '%s'" % line)
+
+                indent_level = len(md.group('leading_whitespace'))
+                flag_name = md.group('flag_name').strip().lower()
+                type_flags = []
+            else:
+                try: 
+                    k, v = line.split(':', 1)
+                    type_facts[k.strip().lower()] = v.strip()
+                except:
+                    # Eh, fuck it.
+                    pass
+
+def get_dmidecode_version():
+    out = subprocess.check_output(['/usr/local/sbin/dmidecode','-V'])
+    version_num = string.split(out, '.')
+    return {'major': int(version_num[0]),
+            'minor': int(version_num[1]),
+            'micro': int(0)
+    }
+
+if __name__ == '__main__':
+    dmidecode_version_semver = get_dmidecode_version()
+    get_dmidecode_facts(dmidecode_version_semver)
+    dump_facts(dmidecode_facts)

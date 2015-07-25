@@ -1,0 +1,6 @@
+---
+- name: /boot/loader.conf | debug.acpi.resume_beep
+  sysrc:
+    dest: /boot/loader.conf
+    name: debug.acpi.resume_beep
+    value: 0

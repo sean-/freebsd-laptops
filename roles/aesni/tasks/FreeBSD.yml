@@ -1,0 +1,10 @@
+---
+- name: /boot/loader.conf | aesni_load="YES"
+  sysrc:
+    dest: /boot/loader.conf
+    name: aesni_load
+    value: "YES"
+
+- name: aesni | kldload
+  kld:
+    name: aesni

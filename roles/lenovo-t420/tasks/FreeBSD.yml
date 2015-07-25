@@ -1,0 +1,67 @@
+---
+- name: /etc/sysctl.conf | hw.acpi.lid_switch_state
+  sysrc:
+    name: hw.acpi.lid_switch_state
+    value: "S3"
+    dest: /etc/sysctl.conf
+
+- name: /etc/sysctl.conf | hw.acpi.power_button_state
+  sysrc:
+    name: hw.acpi.power_button_state
+    value: "S5"
+    dest: /etc/sysctl.conf
+
+- name: /etc/sysctl.conf | hw.acpi.reset_video
+  sysrc:
+    name: hw.acpi.reset_video
+    value: "0"
+    dest: /etc/sysctl.conf
+
+- name: /etc/sysctl.conf | hw.acpi.sleep_button_state
+  sysrc:
+    name: hw.acpi.sleep_button_state
+    value: "S3"
+    dest: /etc/sysctl.conf
+
+# NOTE(seanc@): There is no reason this is set to 10 other than
+# personal preference.
+- name: /etc/sysctl.conf | hw.acpi.sleep_delay
+  sysrc:
+    name: hw.acpi.sleep_delay
+    value: "1"
+    dest: /etc/sysctl.conf
+
+# NOTE(seanc@): The following options are taken from
+# https://www.banym.de/freebsd/install-freebsd-11-on-thinkpad-t420
+- name: /etc/rc.conf | t420 services
+  sysrc:
+    name: "{{ item }}"
+    value: "YES"
+  with_items:
+    - hald_enable
+    - dbus_enable
+
+- name: /etc/rc.conf | performance_cx_lowest
+  sysrc:
+    name: performance_cx_lowest
+    value: "Cmax"
+
+- name: /etc/rc.conf | moused_flags
+  sysrc:
+    name: moused_flags
+    value: "-VH"
+
+- name: /boot/loader.conf | kern.vty
+  sysrc:
+    name: kern.vty
+    value: "vt"
+    dest: /boot/loader.conf
+
+- name: /boot/loader.conf | hw.vga.textmode
+  sysrc:
+    name: hw.vga.textmode
+    value: "1"
+    dest: /boot/loader.conf
+
+- name: sysctl restart
+  command: /etc/rc.d/sysctl start

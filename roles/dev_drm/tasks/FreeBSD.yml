@@ -1,0 +1,46 @@
+---
+- name: kld | drm
+  kld:
+    name: drm
+
+- name: drm2 | kldload
+  kld:
+    name: drm2
+
+# NOTE(seanc@): These tunables are contained in
+# sys/dev/drm2/i915/i915_drv.c
+- name: drm2 | /boot/loader.conf | enable_rc6
+  sysrc:
+    dest: /boot/loader.conf
+    name: 'drm.i915.enable_rc6'
+    value: "7"
+
+# NOTE(seanc@, 2015-06-14): This boot value for
+# drm.i915.prefault_disable is uninitialized by the kernel, explicitly
+# set to 0 at boot time.
+- name: drm2 | /boot/loader.conf | defaults set to zero
+  sysrc:
+    dest: /boot/loader.conf
+    name: "{{ item }}"
+    value: "0"
+  with_items:
+    - drm.i915.intel_iommu_enabled
+    - drm.i915.intel_iommu_gfx_mapped
+    - drm.i915.lvds_downclock
+    - drm.i915.prefault_disable
+
+- name: drm2 | /boot/loader.conf | defaults set to -1
+  sysrc:
+    dest: /boot/loader.conf
+    name: "{{ item }}"
+    value: "-1"
+  with_items:
+    - drm.i915.semaphores
+
+- name: drm2 | /boot/loader.conf | defaults set to 1
+  sysrc:
+    dest: /boot/loader.conf
+    name: "{{ item }}"
+    value: "1"
+  with_items:
+    - drm.i915.try_reset

@@ -1,0 +1,5 @@
+---
+- name: /etc/rc.conf | sendmail_enable
+  sysrc:
+    name: sendmail_enable
+    value: "NONE"

@@ -1,0 +1,9 @@
+---
+dependencies:
+  - acpi_ibm
+  - acpi_video
+  - aesni
+  - dev_drm
+  - powerd
+  - sendmail
+  - zfs

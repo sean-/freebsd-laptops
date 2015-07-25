@@ -1,0 +1,4 @@
+---
+- name: acpi_ibm | kldload
+  kld:
+    name: acpi_ibm

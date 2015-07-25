@@ -1,0 +1,6 @@
+---
+- name: main
+  include: FreeBSD.yml
+  when: >
+    ansible_distribution == 'FreeBSD' and
+    ansible_local.dmidecode.system_information.family == 'ThinkPad T420'

@@ -1,0 +1,15 @@
+---
+- name: Install facts
+  hosts: local
+  roles:
+    - facts
+  gather_facts: true
+  sudo: true
+
+- name: Interrogating Local Machine
+  hosts: local
+  gather_facts: true
+
+- hosts: local
+  roles:
+    - lenovo-t420

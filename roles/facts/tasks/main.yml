@@ -1,0 +1,23 @@
+---
+- name: facts.d | directory
+  file:
+    name: /usr/local/etc/ansible/facts.d
+    state: directory
+    owner: root
+    group: wheel
+    mode: 0755
+
+- name: facts.d | FreeBSD
+  include: FreeBSD.yml
+  when: ansible_os_family == 'FreeBSD'
+
+- name: facts.d | dmidecode
+  template:
+    dest: /usr/local/etc/ansible/facts.d/dmidecode.fact
+    src: dmidecode.py.j2
+    owner: root
+    group: wheel
+    mode: 0755
+
+- name: facts.d | run
+  setup: filter=ansible_local

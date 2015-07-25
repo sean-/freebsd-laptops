@@ -1,0 +1,13 @@
+---
+- name: /etc/rc.conf | powerd_enable
+  sysrc:
+    name: powerd_enable
+    value: "YES"
+
+- name: /etc/rc.conf | powerd_flags
+  sysrc:
+    name: powerd_flags
+    value: "-a hiadaptive -b minimum"
+
+- name: powerd | start
+  command: /etc/rc.d/powerd restart

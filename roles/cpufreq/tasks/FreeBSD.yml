@@ -1,0 +1,23 @@
+---
+- name: cpufreq | sysctl kern.timecounter.hardware
+  sysrc:
+    name: kern.timecounter.hardware
+    value: TSC-low
+    dest: /etc/sysctl.conf
+
+- name: cpufreq | kldload
+  kld:
+    name: cpufreq
+
+# NOTES(seanc@, 2015-06-18): https://wiki.freebsd.org/TuningPowerConsumption
+- name: cpufreq | /boot/loader.conf | p4tcc hint
+  sysrc:
+    dest: /boot/loader.conf
+    name: hint.p4tcc.0.disabled
+    value: "1"
+
+- name: cpufreq | /boot/loader.conf | acpi_throttle
+  sysrc:
+    dest: /boot/loader.conf
+    name: hint.acpi_throttle.0.disabled
+    value: "1"
