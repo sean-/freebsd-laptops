@@ -1,0 +1,32 @@
+#!{{ ansible_python_interpreter }} --
+
+import json
+import subprocess
+
+cli_args = {}
+freebsd_facts = {}
+freebsd_version_semver = { 'major': 0, 'minor': 0, 'micro': 0}
+
+FLAG_RE = '^(?P<leading_whitespace>[\s]+)(?P<flag_name>[^\:]+):$'
+
+def dump_facts(facts):
+    print json.dumps(facts, sort_keys=True, indent=4, separators=(',', ': '))
+
+def get_sysctl_str(key):
+    out = subprocess.check_output(['/sbin/sysctl', '-n', key])
+    return out.strip()
+
+def get_freebsd_facts():
+    def update_facts(key, data_type=str):
+        value = get_sysctl_str(key)
+        if data_type == str:
+            freebsd_facts[key] = value
+        elif data_type == int:
+            freebsd_facts[key] = int(value)
+
+    update_facts('kern.osreldate', int)
+
+
+if __name__ == '__main__':
+    get_freebsd_facts()
+    dump_facts(freebsd_facts)

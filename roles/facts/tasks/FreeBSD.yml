@@ -1,3 +1,11 @@
 ---
 - name: FreeBSD | dmidecode
   pkgng: name=dmidecode state=present
+
+- name: facts.d | freebsd_version
+  template:
+    dest: /usr/local/etc/ansible/facts.d/freebsd_version.fact
+    src: freebsd_version.py.j2
+    owner: root
+    group: wheel
+    mode: 0755
