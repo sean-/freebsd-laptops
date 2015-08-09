@@ -37,7 +37,7 @@ options:
             - Whether the module should be loaded.
     boot:
         required: false
-        default: false
+        default: true
         choices: [ true, false ]
         description:
             - Whether the module should be in /boot/loader.conf.
