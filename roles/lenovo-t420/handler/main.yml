@@ -2,6 +2,9 @@
 - name: dbus start
   service: name=dbus state=started
 
+- name: moused restart
+  service: name=moused state=restarted
+
 - name: sysctl restart
   service: name=sysctl state=restarted
 

@@ -76,6 +76,8 @@
   sysrc:
     name: moused_flags
     value: "-VH"
+  notify:
+    - moused restart
 
 - name: /boot/loader.conf | kern.vty
   lineinfile:
