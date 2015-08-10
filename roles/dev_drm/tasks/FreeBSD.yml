@@ -5,52 +5,24 @@
 - name: drm2 | kldload
   kld: name=drm2 load=yes boot=yes
 
-# NOTE(seanc@): These tunables are contained in
+# NOTE(seanc@, 2015-06-14): The boot value for drm.i915.prefault_disable is
+# uninitialized by the kernel, explicitly set to 0 at boot time.
+#
+# NOTE(seanc@): enable_rc6 tunables is defined in
 # sys/dev/drm2/i915/i915_drv.c
-- name: drm2 | /boot/loader.conf | enable_rc6
+- name: drm2 | /boot/loader.conf | defaults
   lineinfile:
     dest: /boot/loader.conf
-    regexp: '^([\s]*)drm\.i915\.enable_rc6([\s]*)='
-    line: 'drm.i915.enable_rc6="7"'
-    owner: root
-    group: wheel
-    mode: 0644
-
-# NOTE(seanc@, 2015-06-14): This boot value for
-# drm.i915.prefault_disable is uninitialized by the kernel, explicitly
-# set to 0 at boot time.
-- name: drm2 | /boot/loader.conf | defaults set to zero
-  lineinfile:
-    dest: /boot/loader.conf
-    regexp: '^([\s]*){{ item }}([\s]*)='
-    line: '{{ item }}="0"'
+    regexp: '^([\s]*){{ item.k }}([\s]*)='
+    line: '{{ item.k }}="{{ item.v }}"'
     owner: root
     group: wheel
     mode: 0644
   with_items:
-    - drm.i915.intel_iommu_enabled
-    - drm.i915.intel_iommu_gfx_mapped
-    - drm.i915.lvds_downclock
-    - drm.i915.prefault_disable
-
-- name: drm2 | /boot/loader.conf | defaults set to -1
-  lineinfile:
-    dest: /boot/loader.conf
-    regexp: '^([\s]*){{ item }}([\s]*)='
-    line: '{{ item }}="-1"'
-    owner: root
-    group: wheel
-    mode: 0644
-  with_items:
-    - drm.i915.semaphores
-
-- name: drm2 | /boot/loader.conf | defaults set to 1
-  lineinfile:
-    dest: /boot/loader.conf
-    regexp: '^([\s]*){{ item }}([\s]*)='
-    line: '{{ item }}="1"'
-    owner: root
-    group: wheel
-    mode: 0644
-  with_items:
-    - drm.i915.try_reset
+    - { k: 'drm.i915.intel_iommu_enabled',    v:  '0' }
+    - { k: 'drm.i915.intel_iommu_gfx_mapped', v:  '0' }
+    - { k: 'drm.i915.lvds_downclock',         v:  '0' }
+    - { k: 'drm.i915.prefault_disable',       v:  '0' }
+    - { k: 'drm.i915.semaphores',             v: '-1' }
+    - { k: 'drm.i915.try_reset',              v:  '1' }
+    - { k: 'drm.i915.enable_rc6',             v:  '7' }
