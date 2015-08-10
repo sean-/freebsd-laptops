@@ -1,45 +1,59 @@
 ---
 - name: /etc/sysctl.conf | hw.acpi.lid_switch_state
-  sysrc:
-    name: hw.acpi.lid_switch_state
-    value: "S3"
+  lineinfile:
     dest: /etc/sysctl.conf
+    regexp: '^([\s]*)[\#]?([\s]*)hw\.acpi\.lid_switch_state([\s]*)='
+    line: 'hw.acpi.lid_switch_state="S3"'
+    owner: root
+    group: wheel
+    mode: 0644
 
 - name: /etc/sysctl.conf | hw.acpi.power_button_state
-  sysrc:
-    name: hw.acpi.power_button_state
-    value: "S5"
+  lineinfile:
     dest: /etc/sysctl.conf
+    regexp: '^([\s]*)[\#]?([\s]*)hw\.acpi\.power_button_state([\s]*)='
+    line: 'hw.acpi.power_button_state="S5"'
+    owner: root
+    group: wheel
+    mode: 0644
 
 - name: /etc/sysctl.conf | hw.acpi.reset_video
-  sysrc:
-    name: hw.acpi.reset_video
-    value: "0"
+  lineinfile:
     dest: /etc/sysctl.conf
+    regexp: '^([\s]*)[\#]?([\s]*)hw\.acpi\.reset_video([\s]*)='
+    line: 'hw.acpi.reset_video="0"'
+    owner: root
+    group: wheel
+    mode: 0644
 
 - name: /etc/sysctl.conf | hw.acpi.sleep_button_state
-  sysrc:
-    name: hw.acpi.sleep_button_state
-    value: "S3"
+  lineinfile:
     dest: /etc/sysctl.conf
+    regexp: '^([\s]*)[\#]?([\s]*)hw\.acpi\.sleep_button_state([\s]*)='
+    line: 'hw.acpi.sleep_button_state="S3"'
+    owner: root
+    group: wheel
+    mode: 0644
 
-# NOTE(seanc@): There is no reason this is set to 10 other than
+# NOTE(seanc@): There is no reason this is set to 1 other than
 # personal preference.
 - name: /etc/sysctl.conf | hw.acpi.sleep_delay
-  sysrc:
-    name: hw.acpi.sleep_delay
-    value: "1"
+  lineinfile:
     dest: /etc/sysctl.conf
+    regexp: '^([\s]*)[\#]?([\s]*)hw\.acpi\.sleep_delay([\s]*)='
+    line: 'hw.acpi.sleep_delay="1"'
+    owner: root
+    group: wheel
+    mode: 0644
 
 # NOTE(seanc@): The following options are taken from
 # https://www.banym.de/freebsd/install-freebsd-11-on-thinkpad-t420
 - name: /etc/rc.conf | t420 services
   sysrc:
-    name: "{{ item }}"
+    name: "{{ item }}_enable"
     value: "YES"
   with_items:
-    - hald_enable
-    - dbus_enable
+    - dbus
 
 - name: /etc/rc.conf | performance_cx_lowest
   sysrc:
@@ -52,16 +66,22 @@
     value: "-VH"
 
 - name: /boot/loader.conf | kern.vty
-  sysrc:
-    name: kern.vty
-    value: "vt"
+  lineinfile:
     dest: /boot/loader.conf
+    regexp: '^([\s]*)[\#]?([\s]*)kern\.vty([\s]*)='
+    line: 'kern.vty="vt"'
+    owner: root
+    group: wheel
+    mode: 0644
 
 - name: /boot/loader.conf | hw.vga.textmode
-  sysrc:
-    name: hw.vga.textmode
-    value: "1"
+  lineinfile:
     dest: /boot/loader.conf
+    regexp: '^([\s]*)[\#]?([\s]*)hw\.vga.textmode([\s]*)='
+    line: 'hw.vga.textmode="1"'
+    owner: root
+    group: wheel
+    mode: 0644
 
 - name: sysctl restart
   command: /etc/rc.d/sysctl start

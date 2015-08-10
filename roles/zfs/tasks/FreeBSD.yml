@@ -5,7 +5,10 @@
     value: "YES"
 
 - name: /etc/sysctl.conf | vfs.zfs.min_auto_ashift
-  sysrc:
-    name: vfs.zfs.min_auto_ashift
-    value: "12"
+  lineinfile:
     dest: /etc/sysctl.conf
+    regexp: '^([\s]*)\#?([\s]*)vfs\.zfs\.min_auto_ashift([\s]*)='
+    line: 'vfs.zfs.min_auto_ashift="12"'
+    owner: root
+    group: wheel
+    mode: 0644
