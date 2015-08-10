@@ -1,0 +1,11 @@
+---
+# NOTE(seanc@): This is the idiomatic way provided by ansible to make sure a
+# file exists.
+- name: /etc/periodic.conf | powerd_enable
+  copy:
+    dest: /etc/periodic.conf
+    owner: root
+    group: wheel
+    force: no
+    content: ''
+    mode: 0644
