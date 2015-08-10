@@ -6,7 +6,7 @@ import subprocess
 
 # NAME       SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
 # bootpool  1.98G   954M  1.05G         -    34%    46%  1.00x  ONLINE  -
-ZPOOL_RE = '^(?P<pool_name>[\S]+)\t(?P<size>[\S]+)\t(?P<alloc>[\S]+)\t(?P<free>[\S]+)\t(?P<expandsz>[\S]+)\t((?P<frag>[\S]+)\t)?(?P<cap>[\S]+)\t(?P<dedup>[\S]+)\t(?P<health>[\S]+)\t(?P<altroot>[\S]+)[\s]*$'
+ZPOOL_LIST_RE = '^(?P<pool_name>[\S]+)\t(?P<size>[\S]+)\t(?P<alloc>[\S]+)\t(?P<free>[\S]+)\t(?P<expandsz>[\S]+)\t((?P<frag>[\S]+)\t)?(?P<cap>[\S]+)\t(?P<dedup>[\S]+)\t(?P<health>[\S]+)\t(?P<altroot>[\S]+)[\s]*$'
 
 def dump_facts(facts):
     print json.dumps(facts, sort_keys=True, indent=4, separators=(',', ': '))
@@ -19,7 +19,7 @@ def get_zpool_facts():
     facts = {}
     zpool_names = []
     for line in get_zpools().split('\n'):
-        md = re.match(ZPOOL_RE, line)
+        md = re.match(ZPOOL_LIST_RE, line)
         if not md:
             print("no match")
             continue
@@ -49,5 +49,5 @@ def get_zpool_facts():
 
 
 if __name__ == '__main__':
-    freebsd_facts = get_zpool_facts()
-    dump_facts(freebsd_facts)
+    facts = get_zpool_facts()
+    dump_facts(facts)
