@@ -15,6 +15,14 @@
 # *YOUR* email address is needed.
 #owner_email: 'user@example.org'
 
+## Preferences
+#
+# Enable IPv4 on Laptops
+#ipv4_enable: true
+#
+# Disbale IPv6 on Laptops (for now)
+#ipv6_enable: false
+
 ## smtp default mailhost
 #smtp_relayhost:
 #  - 'mailhost.local'
