@@ -6,7 +6,7 @@ apply:: config.yml
 	ansible-playbook -s site.yml -e @config.yml
 
 config.yml:	config.yml.sample
-	/bin/cp -np config.yml.sample config.yml
+	-/bin/cp -np config.yml.sample config.yml
 
 default::
 	@/usr/bin/head -n $(LINES_TO_SHOW) README.md
