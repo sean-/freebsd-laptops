@@ -1,0 +1,110 @@
+---
+- name: zfSnap | pkgng
+  pkgng: name=sysutils/zfsnap state=present
+
+- name: zfSnap | periodic.conf | verbose
+  lineinfile:
+    dest: /etc/periodic.conf
+    regexp: '^([\s]*)[\#]?([\s]*){{ item }}_zfsnap_verbose([\s]*)='
+    line: '{{ item }}_zfsnap_verbose="YES"'
+    owner: root
+    group: wheel
+    mode: 0644
+  with_items:
+    - hourly
+    - daily
+    - weekly
+    - monthly
+    - reboot
+
+- name: zfSnap | periodic.conf | delete verbose
+  lineinfile:
+    dest: /etc/periodic.conf
+    regexp: '^([\s]*)[\#]?([\s]*){{ item }}_zfsnap_delete_verbose([\s]*)='
+    line: '{{ item }}_zfsnap_delete_verbose="YES"'
+    owner: root
+    group: wheel
+    mode: 0644
+  with_items:
+    - daily
+    - weekly
+    - monthly
+
+- name: zfSnap | periodic.conf | ttls
+  lineinfile:
+    dest: /etc/periodic.conf
+    regexp: '^([\s]*)[\#]?([\s]*){{ item.period }}_zfsnap_ttl([\s]*)='
+    line: '{{ item.period }}_zfsnap_ttl="{{ item.ttl }}"'
+    owner: root
+    group: wheel
+    mode: 0644
+  with_items:
+    - { period: 'hourly', ttl: '3d' }
+    - { period: 'daily', ttl: '9d' }
+    - { period: 'weekly', ttl: '5w' }
+    - { period: 'monthly', ttl: '6m' }
+    - { period: 'reboot', ttl: '14d' }
+
+# FIXME(seanc@): This should only scrub everything not */tmp and */log.
+- name: zfSnap | periodic.conf | recursive
+  lineinfile:
+    dest: /etc/periodic.conf
+    regexp: '^([\s]*)[\#]?([\s]*){{ item }}_zfsnap_recursive_fs([\s]*)='
+    line: '{{ item }}_zfsnap_recursive_fs="{{ ansible_local.zpool._zpool_names_str }}"'
+    owner: root
+    group: wheel
+    mode: 0644
+  with_items:
+    - hourly
+    - daily
+    - weekly
+    - monthly
+    - reboot
+  when: ansible_local.zpool._zpool_names_str is defined
+
+- name: zfSnap | crontab | hourly
+  lineinfile:
+    dest: /etc/crontab
+    regexp: '^([\s]*)4([\s]+)\*([\s]+)\*([\s]+)\*([\s]+)\*([\s]+)root([\s]+)periodic([\s]+)hourly([\s]*)$'
+    line: '4	*	*	*	*	root	periodic hourly'
+    owner: root
+    group: wheel
+    mode: 0644
+
+- name: zfSnap | crontab | reboot
+  lineinfile:
+    dest: /etc/crontab
+    regexp: '^([\s]*)@reboot([\s]+)root([\s]+)periodic([\s]+)reboot([\s]*)$'
+    line: '@reboot					root	periodic reboot'
+    owner: root
+    group: wheel
+    mode: 0644
+
+- name: zfSnap | periodic.conf | enable
+  lineinfile:
+    dest: /etc/periodic.conf
+    regexp: '^([\s]*)[\#]?([\s]*){{ item }}_zfsnap_enable([\s]*)='
+    line: '{{ item }}_zfsnap_enable="YES"'
+    owner: root
+    group: wheel
+    mode: 0644
+  with_items:
+    - hourly
+    - daily
+    - weekly
+    - monthly
+    - reboot
+
+- name: zfSnap | periodic.conf | delete enable
+  lineinfile:
+    dest: /etc/periodic.conf
+    regexp: '^([\s]*)[\#]?([\s]*){{ item }}_zfsnap_delete_enable([\s]*)='
+    line: '{{ item }}_zfsnap_delete_enable="YES"'
+    owner: root
+    group: wheel
+    mode: 0644
+  with_items:
+    - daily
+    - weekly
+    - monthly
+

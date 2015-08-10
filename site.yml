@@ -10,6 +10,11 @@
   hosts: local
   gather_facts: true
 
+- name: zfs undo
+  hosts: local
+  roles:
+    - zfSnap
+
 - hosts: local
   roles:
     - lenovo-t420

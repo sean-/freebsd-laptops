@@ -1,0 +1,4 @@
+---
+dependencies:
+  - periodic_conf
+  - zfs
