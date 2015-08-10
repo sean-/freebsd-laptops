@@ -94,6 +94,3 @@
     owner: root
     group: wheel
     mode: 0644
-
-- name: sysctl restart
-  command: /etc/rc.d/sysctl start
