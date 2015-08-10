@@ -72,6 +72,11 @@
     name: performance_cx_lowest
     value: "Cmax"
 
+- name: /etc/rc.conf | economy_cx_lowest
+  sysrc:
+    name: economy_cx_lowest
+    value: "Cmax"
+
 - name: /etc/rc.conf | moused_flags
   sysrc:
     name: moused_flags
