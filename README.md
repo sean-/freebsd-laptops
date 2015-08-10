@@ -24,10 +24,11 @@ Ansible playbooks for automating the setup and use of laptop devices.
 
 ## Installation
 
-To make use of this repository, you must install `ansible`:
+To make use of this repository, you must install `sudo` and `ansible`:
 
 ```shell
-sudo pkg install sysutils/ansible
+# pkg install security/sudo
+# pkg install sysutils/ansible
 ```
 
 ## Debugging
