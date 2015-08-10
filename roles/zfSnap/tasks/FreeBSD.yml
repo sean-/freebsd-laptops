@@ -5,8 +5,8 @@
 - name: zfSnap | periodic.conf | verbose
   lineinfile:
     dest: /etc/periodic.conf
-    regexp: '^([\s]*)[\#]?([\s]*){{ item }}_zfsnap_verbose([\s]*)='
-    line: '{{ item }}_zfsnap_verbose="YES"'
+    regexp: '^([\s]*)[\#]?([\s]*){{ item }}_zfsnap_verbose="{{ zfsnap_verbose }}"'
+    line: '{{ item }}_zfsnap_verbose="{{ zfsnap_verbose }}"'
     owner: root
     group: wheel
     mode: 0644
@@ -20,8 +20,8 @@
 - name: zfSnap | periodic.conf | delete verbose
   lineinfile:
     dest: /etc/periodic.conf
-    regexp: '^([\s]*)[\#]?([\s]*){{ item }}_zfsnap_delete_verbose([\s]*)='
-    line: '{{ item }}_zfsnap_delete_verbose="YES"'
+    regexp: '^([\s]*)[\#]?([\s]*){{ item }}_zfsnap_delete_verbose([\s]*)="{{ zfsnap_verbose }}"'
+    line: '{{ item }}_zfsnap_delete_verbose="{{ zfsnap_verbose }}"'
     owner: root
     group: wheel
     mode: 0644
@@ -39,11 +39,11 @@
     group: wheel
     mode: 0644
   with_items:
-    - { period: 'hourly',  ttl: '{{  zfsnap_default_hourly_ttl | default("3d")  }}' }
-    - { period: 'daily',   ttl: '{{   zfsnap_default_daily_ttl | default("9d")  }}' }
-    - { period: 'weekly',  ttl: '{{  zfsnap_default_weekly_ttl | default("5w")  }}' }
-    - { period: 'monthly', ttl: '{{ zfsnap_default_monthly_ttl | default("6m")  }}' }
-    - { period: 'reboot',  ttl: '{{  zfsnap_default_reboot_ttl | default("14d") }}' }
+    - { period: 'hourly',  ttl: '{{  zfsnap_hourly_ttl }}' }
+    - { period: 'daily',   ttl: '{{   zfsnap_daily_ttl }}' }
+    - { period: 'weekly',  ttl: '{{  zfsnap_weekly_ttl }}' }
+    - { period: 'monthly', ttl: '{{ zfsnap_monthly_ttl }}' }
+    - { period: 'reboot',  ttl: '{{  zfsnap_reboot_ttl }}' }
 
 - name: zfSnap | periodic.conf | snapshot recursive
   lineinfile:
