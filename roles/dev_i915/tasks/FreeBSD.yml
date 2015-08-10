@@ -1,0 +1,3 @@
+---
+- name: kld | i915
+  kld: name=i915 boot=yes load=yes

@@ -4,6 +4,7 @@ dependencies:
   - acpi_video
   - aesni
   - dev_drm
+  - dev_i915
   - powerd
   - sendmail
   - zfs
