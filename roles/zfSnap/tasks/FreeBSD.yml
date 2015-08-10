@@ -34,7 +34,7 @@
   lineinfile:
     dest: /etc/periodic.conf
     regexp: '^([\s]*)[\#]?([\s]*){{ item.period }}_zfsnap_ttl([\s]*)='
-    line: '{{ item.period }}_zfsnap_ttl="{{ item.ttl }}"'
+    line: '{{ item.period }}_zfsnap_ttl="{{ item.ttl | mandatory }}"'
     owner: root
     group: wheel
     mode: 0644
@@ -122,4 +122,3 @@
     - daily
     - weekly
     - monthly
-
