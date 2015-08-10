@@ -1,0 +1,6 @@
+---
+- name: sysctl restart
+  service: name=sysctl state=restarted
+
+- name: dbus start
+  service: name=dbus state=started

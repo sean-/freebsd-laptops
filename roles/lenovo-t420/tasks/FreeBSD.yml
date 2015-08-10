@@ -7,6 +7,8 @@
     owner: root
     group: wheel
     mode: 0644
+  notify:
+    - sysctl restart
 
 - name: /etc/sysctl.conf | hw.acpi.power_button_state
   lineinfile:
@@ -16,6 +18,8 @@
     owner: root
     group: wheel
     mode: 0644
+  notify:
+    - sysctl restart
 
 - name: /etc/sysctl.conf | hw.acpi.reset_video
   lineinfile:
@@ -25,6 +29,8 @@
     owner: root
     group: wheel
     mode: 0644
+  notify:
+    - sysctl restart
 
 - name: /etc/sysctl.conf | hw.acpi.sleep_button_state
   lineinfile:
@@ -34,6 +40,8 @@
     owner: root
     group: wheel
     mode: 0644
+  notify:
+    - sysctl restart
 
 # NOTE(seanc@): There is no reason this is set to 1 other than
 # personal preference.
@@ -45,6 +53,8 @@
     owner: root
     group: wheel
     mode: 0644
+  notify:
+    - sysctl restart
 
 # NOTE(seanc@): The following options are taken from
 # https://www.banym.de/freebsd/install-freebsd-11-on-thinkpad-t420
@@ -54,6 +64,8 @@
     value: "YES"
   with_items:
     - dbus
+  notify:
+    - dbus start
 
 - name: /etc/rc.conf | performance_cx_lowest
   sysrc:
