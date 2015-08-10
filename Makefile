@@ -6,7 +6,13 @@ apply:: config.yml
 	ansible-playbook -s site.yml -e @config.yml
 
 config.yml:	config.yml.sample
-	-/bin/cp -np config.yml.sample config.yml
+	@if [ -e config.yml -a config.yml.sample -nt config.yml ]; then \
+		printf '\n\tNOTICE: config.yml is out of date compared to config.yml.sample.\n' ; \
+		printf '\tEither `touch config.yml` or update config.yml accordingly.\n\n' ; \
+		printf '\tTo see the changes: diff -u config.yml.sample config.yml\n\n' ; \
+	else \
+		/bin/cp -np config.yml.sample config.yml || exit 0 ; \
+	fi
 
 default::
 	@/usr/bin/head -n $(LINES_TO_SHOW) README.md
