@@ -1,6 +1,6 @@
 ---
 - name: FreeBSD | dmidecode
-  pkgng: name=dmidecode state=present
+  pkgng: name=sysutils/dmidecode state=present
 
 - name: facts.d | freebsd_version
   template:
