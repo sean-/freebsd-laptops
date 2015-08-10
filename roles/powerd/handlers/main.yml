@@ -1,0 +1,6 @@
+---
+- name: powerd start
+  service: name=powerd state=started
+
+- name: powerd restart
+  service: name=powerd state=restarted

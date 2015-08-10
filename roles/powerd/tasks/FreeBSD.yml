@@ -3,11 +3,12 @@
   sysrc:
     name: powerd_enable
     value: "YES"
+  notify:
+    - powerd start
 
 - name: /etc/rc.conf | powerd_flags
   sysrc:
     name: powerd_flags
     value: "-a hiadaptive -b minimum"
-
-- name: powerd | start
-  command: /etc/rc.d/powerd restart
+  notify:
+    - powerd restart
