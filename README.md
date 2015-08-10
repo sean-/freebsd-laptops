@@ -5,13 +5,14 @@ Ansible playbooks for automating the setup and use of laptop devices.
 ## Usage
 
 ```shell
-% ansible-playbook --check -s site.yml
-% ansible-playbook -s site.yml
+% make plan
+% make apply
+
+# Or if you prefer the full ansible-playbook(1) syntax:
 % ansible-playbook --check -s site.yml -e @config # equivalent to `make plan`
 % ansible-playbook -s site.yml -e @config.yml     # equivalent to `make apply`
 ```
 
-This assumes `sysutils/ansible` has been installed already.
 ## Customization
 
 ```shell
@@ -22,6 +23,8 @@ This assumes `sysutils/ansible` has been installed already.
 ```
 
 ## Installation
+
+To make use of this repository, you must install `ansible`:
 
 ```shell
 sudo pkg install sysutils/ansible
