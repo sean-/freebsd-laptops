@@ -1,0 +1,84 @@
+#!{{ ansible_python_interpreter }} --
+
+import json
+import re
+import subprocess
+
+# NAME                  USED  AVAIL  REFER  MOUNTPOINT
+# bootpool              954M  1015M   952M  /bootpool
+# tank                 8.31G   418G    96K  /tank
+# tank/ROOT            1.95G   418G    96K  none
+# bootpool  1.98G   954M  1.05G         -    34%    46%  1.00x  ONLINE  -
+ZFS_LIST_RE = '^(?P<dataset_name>[\S]+)\t(?P<used>[\S]+)\t(?P<avail>[\S]+)\t(?P<refer>[\S]+)\t(?P<mountpoint>[\S]+)[\s]*$'
+ZFS_SNAP_HEURISTIC_BLACKLIST_RE           = '\/(log|swap|tmp)$'
+ZFS_SNAP_HEURISTIC_WHITELIST_RECURSIVE_RE = '^(?P<zpool_name>[^\/]+)\/(usr|ROOT)$'
+ZFS_SNAP_HEURISTIC_WHITELISTED_RE         = '^(?P<zpool_name>[^\/]+)\/(usr|ROOT)(\/|$)'
+
+def dump_facts(facts):
+    print json.dumps(facts, sort_keys=True, indent=4, separators=(',', ': '))
+
+def get_zfs_list():
+    out = subprocess.check_output(['/sbin/zfs', 'list', '-H'])
+    return out.strip()
+
+def get_zfs_list_facts():
+    facts = {}
+    dataset_names = []
+    for line in get_zfs_list().split('\n'):
+        md = re.match(ZFS_LIST_RE, line)
+        if not md:
+            print("no match")
+            continue
+
+        dataset = {}
+
+        dataset_name = md.group('dataset_name')
+        if dataset_name is None:
+            raise RuntimeError('zfs dataset name required')
+
+        dataset['name'] = dataset_name
+        dataset_names.append(dataset_name)
+
+        dataset.update(md.groupdict())
+        dataset['_debug_zfs_dataset_list'] = line
+        facts[dataset_name] = dataset
+
+    # NOTE(seanc@): Yes, this is right.
+    facts['_zfs_dataset_names'] = dataset_names
+
+    # FIXME(seanc@): No, fuck no.  Because ansible/jinja encoding of this
+    # exact operation is "problematic," handle this in the fact and create
+    # the desired output.  Happy to be proven wrong.
+    facts['_zfs_dataset_names_str'] = ' '.join(dataset_names)
+
+    # Create a list of whitelisted datasets that we will obtain recursive
+    # snapshots on.  Datasets are whitelisted for recursive and removed from
+    # the non-recursive snapshot list.  If a dataset that is blacklisted
+    # matches a whitelisted, recursive dataset, nothing happens (the
+    # blacklisted filesystem is still included).  This is a feature request
+    # for zfSnap, but it's not feasible at this time to work around the
+    # limitation.
+    rsnap_datasets = []
+    for dataset_name in dataset_names:
+        if not re.match(ZFS_SNAP_HEURISTIC_WHITELIST_RECURSIVE_RE, dataset_name):
+            continue
+        rsnap_datasets.append(dataset_name)
+    facts['_zfs_snapshot_recursive_datasets'] = ' '.join(rsnap_datasets)
+
+    esnap_datasets = []
+    for dataset_name in dataset_names:
+        if re.match(ZFS_SNAP_HEURISTIC_WHITELISTED_RE, dataset_name):
+            # Already taking a recursive snapshot of this dataset
+            continue
+
+        if re.search(ZFS_SNAP_HEURISTIC_BLACKLIST_RE, dataset_name):
+            continue
+        esnap_datasets.append(dataset_name)
+    facts['_zfs_snapshot_explicit_datasets'] = ' '.join(esnap_datasets)
+
+    return facts
+
+
+if __name__ == '__main__':
+    facts = get_zfs_list_facts()
+    dump_facts(facts)

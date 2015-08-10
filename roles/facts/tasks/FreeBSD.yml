@@ -10,6 +10,14 @@
     group: wheel
     mode: 0755
 
+- name: facts.d | zfs
+  template:
+    dest: /usr/local/etc/ansible/facts.d/zfs.fact
+    src: zfs.py.j2
+    owner: root
+    group: wheel
+    mode: 0755
+
 - name: facts.d | zpool
   template:
     dest: /usr/local/etc/ansible/facts.d/zpool.fact
