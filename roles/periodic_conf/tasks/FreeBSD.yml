@@ -1,7 +1,21 @@
 ---
-# NOTE(seanc@): This is the idiomatic way provided by ansible to make sure a
-# file exists.
-- name: /etc/periodic.conf | powerd_enable
+# NOTE(seanc@): The copy module with force=no and content='' is the idiomatic
+# way provided by ansible to make sure a file exists.
+- name: periodic | log files
+  copy:
+    dest: "/var/log/periodic-{{ item }}.log"
+    owner: root
+    group: wheel
+    force: no
+    content: ''
+    mode: 0640
+  with_items:
+    - hourly
+    - daily
+    - weekly
+    - monthly
+
+- name: /etc/periodic.conf
   copy:
     dest: /etc/periodic.conf
     owner: root
