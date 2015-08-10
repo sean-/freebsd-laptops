@@ -5,6 +5,7 @@ dependencies:
   - aesni
   - dev_drm
   - dev_i915
+  - hosts
   - periodic_conf
   - powerd
   - sendmail

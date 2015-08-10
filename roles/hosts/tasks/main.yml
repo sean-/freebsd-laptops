@@ -1,0 +1,57 @@
+---
+# FIXME(seanc@): Should include FreeBSD.yml, set an rc.conf entry, run
+# hostname service, then re-run facts.
+
+- name: localhost | ipv4 | disable
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^[\s]*(127\.0\.0\.1[\s]'
+    owner: root
+    group: wheel
+    mode: 0644
+    state: absent
+    backup: yes
+  when: not ipv4_enable
+  tags:
+    - hosts
+    - ipv4
+
+#- lineinfile: dest=/etc/hosts regexp='^127\.0\.0\.1' line='127.0.0.1 localhost' owner=root group=root mode=0644
+
+- name: localhost | ipv4 | enable
+  lineinfile:
+    dest: /etc/hosts
+    line: '127.0.0.1		localhost {{ ansible_hostname }}'
+    owner: root
+    group: wheel
+    mode: 0644
+  when: ipv4_enable
+  tags:
+    - hosts
+    - ipv4
+
+- name: localhost | ipv6 | disable
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^[\s]*::1[\s]'
+    owner: root
+    group: wheel
+    mode: 0644
+    state: absent
+    backup: yes
+  when: not ipv6_enable
+  tags:
+    - hosts
+    - ipv6
+
+- name: localhost | ipv6 | enable
+  lineinfile:
+    dest: /etc/hosts
+    line: '::1			localhost {{ ansible_hostname }}'
+    owner: root
+    group: wheel
+    mode: 0644
+  when: ipv6_enable
+  tags:
+    - hosts
+    - ipv6
