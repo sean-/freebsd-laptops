@@ -40,7 +40,4 @@ sudo pkg install sysutils/ansible
 * Add a poudriere for building ports specific to the config of your laptop
 * Enable/disable features based on the kern.osreldate
 * Setup and use other sane defaults (e.g. openntpd vs xntpd, opensmtpd, ipfw)
-* Switch from using `library/sysrc` to lineinfile for sysrc-style updates.
-* Improve `library/kld` to not return changed when a module is already
-  loaded.
 * Figure out a different way to query the hardware without `dmidecode`
