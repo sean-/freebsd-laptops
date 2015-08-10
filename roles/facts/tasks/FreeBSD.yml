@@ -9,3 +9,11 @@
     owner: root
     group: wheel
     mode: 0755
+
+- name: facts.d | zpool
+  template:
+    dest: /usr/local/etc/ansible/facts.d/zpool.fact
+    src: zpool.py.j2
+    owner: root
+    group: wheel
+    mode: 0755

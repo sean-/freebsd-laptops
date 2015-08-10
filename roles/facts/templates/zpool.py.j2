@@ -1,0 +1,53 @@
+#!{{ ansible_python_interpreter }} --
+
+import json
+import re
+import subprocess
+
+# NAME       SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
+# bootpool  1.98G   954M  1.05G         -    34%    46%  1.00x  ONLINE  -
+ZPOOL_RE = '^(?P<pool_name>[\S]+)\t(?P<size>[\S]+)\t(?P<alloc>[\S]+)\t(?P<free>[\S]+)\t(?P<expandsz>[\S]+)\t((?P<frag>[\S]+)\t)?(?P<cap>[\S]+)\t(?P<dedup>[\S]+)\t(?P<health>[\S]+)\t(?P<altroot>[\S]+)[\s]*$'
+
+def dump_facts(facts):
+    print json.dumps(facts, sort_keys=True, indent=4, separators=(',', ': '))
+
+def get_zpools():
+    out = subprocess.check_output(['/sbin/zpool', 'list', '-H'])
+    return out.strip()
+
+def get_zpool_facts():
+    facts = {}
+    zpool_names = []
+    for line in get_zpools().split('\n'):
+        md = re.match(ZPOOL_RE, line)
+        if not md:
+            print("no match")
+            continue
+
+        pool = {}
+
+        pool_name = md.group('pool_name')
+        if not pool_name:
+            raise RuntimeError('zpool name required')
+
+        pool['name'] = pool_name
+        zpool_names.append(pool_name)
+
+        pool.update(md.groupdict())
+        pool['_debug_zpool_list'] = line
+        facts[pool_name] = pool
+
+    # NOTE(seanc@): Yes, this is right.
+    facts['_zpool_names'] = zpool_names
+
+    # FIXME(seanc@): No, fuck no.  Because ansible/jinja encoding of this
+    # exact operation is "problematic," handle this in the fact and create
+    # the desired output.  Happy to be proven wrong.
+    facts['_zpool_names_str'] = ' '.join(zpool_names)
+
+    return facts
+
+
+if __name__ == '__main__':
+    freebsd_facts = get_zpool_facts()
+    dump_facts(freebsd_facts)
