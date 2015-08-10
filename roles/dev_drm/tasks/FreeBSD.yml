@@ -1,11 +1,9 @@
 ---
 - name: kld | drm
-  kld:
-    name: drm
+  kld: name=drm load=yes boot=yes
 
 - name: drm2 | kldload
-  kld:
-    name: drm2
+  kld: name=drm2 load=yes boot=yes
 
 # NOTE(seanc@): These tunables are contained in
 # sys/dev/drm2/i915/i915_drv.c

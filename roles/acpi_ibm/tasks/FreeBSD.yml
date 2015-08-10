@@ -1,4 +1,3 @@
 ---
 - name: acpi_ibm | kldload
-  kld:
-    name: acpi_ibm
+  kld: name=acpi_ibm boot=yes load=yes
