@@ -1,0 +1,15 @@
+---
+### Local Configuration Defaults
+#
+# Alpha sorted list with default values specified unless otherwise noted in a
+# comment describing the configuration default.
+
+## zfSnap tunables
+#zfsnap_default_hourly_ttl: '3d'
+#zfsnap_default_daily_ttl: '9d'
+#zfsnap_default_weekly_ttl: '5w'
+#zfsnap_default_monthly_ttl: '6m'
+#zfsnap_default_reboot_ttl: '14d'
+
+# Must have at least one value in this dict
+_zzz_config_version: '0.1'

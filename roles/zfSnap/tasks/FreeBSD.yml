@@ -39,18 +39,17 @@
     group: wheel
     mode: 0644
   with_items:
-    - { period: 'hourly', ttl: '3d' }
-    - { period: 'daily', ttl: '9d' }
-    - { period: 'weekly', ttl: '5w' }
-    - { period: 'monthly', ttl: '6m' }
-    - { period: 'reboot', ttl: '14d' }
+    - { period: 'hourly',  ttl: '{{  zfsnap_default_hourly_ttl | default("3d")  }}' }
+    - { period: 'daily',   ttl: '{{   zfsnap_default_daily_ttl | default("9d")  }}' }
+    - { period: 'weekly',  ttl: '{{  zfsnap_default_weekly_ttl | default("5w")  }}' }
+    - { period: 'monthly', ttl: '{{ zfsnap_default_monthly_ttl | default("6m")  }}' }
+    - { period: 'reboot',  ttl: '{{  zfsnap_default_reboot_ttl | default("14d") }}' }
 
-# FIXME(seanc@): This should only scrub everything not */tmp and */log.
-- name: zfSnap | periodic.conf | recursive
+- name: zfSnap | periodic.conf | snapshot recursive
   lineinfile:
     dest: /etc/periodic.conf
     regexp: '^([\s]*)[\#]?([\s]*){{ item }}_zfsnap_recursive_fs([\s]*)='
-    line: '{{ item }}_zfsnap_recursive_fs="{{ ansible_local.zpool._zpool_names_str }}"'
+    line: '{{ item }}_zfsnap_recursive_fs="{{ ansible_local.zfs._zfs_snapshot_recursive_datasets | mandatory }}"'
     owner: root
     group: wheel
     mode: 0644
@@ -60,7 +59,23 @@
     - weekly
     - monthly
     - reboot
-  when: ansible_local.zpool._zpool_names_str is defined
+  when: ansible_local.zfs._zfs_snapshot_recursive_datasets
+
+- name: zfSnap | periodic.conf | snapshot explicit
+  lineinfile:
+    dest: /etc/periodic.conf
+    regexp: '^([\s]*)[\#]?([\s]*){{ item }}_zfsnap_fs([\s]*)='
+    line: '{{ item }}_zfsnap_fs="{{ ansible_local.zfs._zfs_snapshot_explicit_datasets | mandatory }}"'
+    owner: root
+    group: wheel
+    mode: 0644
+  with_items:
+    - hourly
+    - daily
+    - weekly
+    - monthly
+    - reboot
+  when: ansible_local.zfs._zfs_snapshot_explicit_datasets
 
 - name: zfSnap | crontab | hourly
   lineinfile:

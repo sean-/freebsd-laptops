@@ -7,9 +7,19 @@ Ansible playbooks for automating the setup and use of laptop devices.
 ```shell
 % ansible-playbook --check -s site.yml
 % ansible-playbook -s site.yml
+% ansible-playbook --check -s site.yml -e @config # equivalent to `make plan`
+% ansible-playbook -s site.yml -e @config.yml     # equivalent to `make apply`
 ```
 
 This assumes `sysutils/ansible` has been installed already.
+## Customization
+
+```shell
+# To customize the defaults:
+% cp config.yml{.sample,}
+% $(EDITOR) config.yml
+% ansible-playbook -s site.yml -e @config.yml
+```
 
 ## Installation
 
@@ -30,8 +40,6 @@ sudo pkg install sysutils/ansible
 * Add a poudriere for building ports specific to the config of your laptop
 * Enable/disable features based on the kern.osreldate
 * Setup and use other sane defaults (e.g. openntpd vs xntpd, opensmtpd, ipfw)
-* Allow users to somehow specify preferences and user-specified defaults
-  (e.g. ipfw vs pf)
 * Switch from using `library/sysrc` to lineinfile for sysrc-style updates.
 * Improve `library/kld` to not return changed when a module is already
   loaded.
