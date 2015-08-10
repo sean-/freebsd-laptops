@@ -1,6 +1,6 @@
 ---
-# FIXME(seanc@): Should include FreeBSD.yml, set an rc.conf entry, run
-# hostname service, then re-run facts.
+# TODO(seanc@, 2015-08-10): Should include FreeBSD.yml, set an rc.conf entry,
+# run hostname service, then re-run facts.
 
 - name: localhost | ipv4 | disable
   lineinfile:
@@ -15,8 +15,6 @@
   tags:
     - hosts
     - ipv4
-
-#- lineinfile: dest=/etc/hosts regexp='^127\.0\.0\.1' line='127.0.0.1 localhost' owner=root group=root mode=0644
 
 - name: localhost | ipv4 | enable
   lineinfile:

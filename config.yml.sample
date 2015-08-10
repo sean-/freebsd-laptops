@@ -2,7 +2,9 @@
 ### Local Configuration Defaults
 #
 # Alpha sorted list with default values specified unless otherwise noted in a
-# comment describing the configuration default.
+# comment describing the configuration default. Copy this file to config.yml
+# and tweak accordingly.  It is not recommended to remove unused parameters,
+# instead leave them there so that drift can be easily corrected via diff(1).
 
 ## Laptop Information
 #
