@@ -1,0 +1,3 @@
+{% for relay in smtp_allowed_outbound_domains %}
+{{ relay | mandatory }}
+{% endfor %}

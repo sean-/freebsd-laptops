@@ -1,0 +1,11 @@
+---
+sendmail_enable: false
+smtp_forward_local_mail_to_owner: true
+
+# No defaults for the following parameters:
+#
+#smtp_allowed_outbound_domains:
+#  - 'local'
+#
+#smtp_relayhost:
+#  - 'mailhost.local'

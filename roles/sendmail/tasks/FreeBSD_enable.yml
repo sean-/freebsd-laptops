@@ -1,0 +1,44 @@
+---
+- name: /etc/rc.conf | sendmail | enabled
+  sysrc:
+    name: "{{ item.k }}"
+    value: "{{ item.v }}"
+  with_items:
+    - { k: 'sendmail_cert_create',      v: 'YES' }
+    - { k: 'sendmail_enable',           v: 'NO'  }
+    - { k: 'sendmail_msp_queue_enable', v: 'YES' }
+    - { k: 'sendmail_outbound_enable',  v: 'NO'  }
+    - { k: 'sendmail_rebuild_aliases',  v: 'YES' }
+    - { k: 'sendmail_submit_enable',    v: 'YES' }
+    - { k: 'sendmail_cert_cn',          v: '{{ laptop_hostname | mandatory }}' }
+  notify:
+    - sendmail start
+
+- name: aliases
+  template:
+    dest: /etc/mail/aliases
+    src: aliases.j2
+    owner: root
+    group: wheel
+    mode: 0644
+  notify:
+    - newaliases
+
+- name: mailer.conf
+  template:
+    dest: /etc/mail/mailer.conf
+    src: mailer.conf.j2
+    owner: root
+    group: wheel
+    mode: 0644
+
+- name: relay-domains
+  template:
+    dest: /etc/mail/relay-domains
+    src: relay-domains.j2
+    owner: root
+    group: wheel
+    mode: 0644
+  when: smtp_relayhosts is defined
+  notify:
+    - sendmail restart

@@ -1,0 +1,13 @@
+---
+- name: newaliases
+  command: /usr/bin/newaliases
+
+- name: sendmail restart
+  service: name=sendmail state=restarted
+
+- name: sendmail start
+  service: name=sendmail state=started
+
+- name: sendmail stop
+  service: name=sendmail state=stopped
+

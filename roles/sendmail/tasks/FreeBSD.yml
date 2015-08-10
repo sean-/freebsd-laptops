@@ -1,5 +1,8 @@
 ---
-- name: /etc/rc.conf | sendmail_enable
-  sysrc:
-    name: sendmail_enable
-    value: "NONE"
+- name: disable
+  include: FreeBSD_disable.yml
+  when: not sendmail_enable
+
+- name: enable
+  include: FreeBSD_enable.yml
+  when: sendmail_enable

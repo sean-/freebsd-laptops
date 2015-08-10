@@ -1,0 +1,12 @@
+---
+- name: /etc/rc.conf | sendmail | disable
+  sysrc:
+    name: "{{ item.k }}"
+    value: "{{ item.v }}"
+  with_items:
+    - { k: 'sendmail_enable',           v: 'NO' }
+    - { k: 'sendmail_msp_queue_enable', v: 'NO' }
+    - { k: 'sendmail_outbound_enable',  v: 'NO' }
+    - { k: 'sendmail_submit_enable',    v: 'NO' }
+  notify:
+    - sendmail stop

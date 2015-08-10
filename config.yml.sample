@@ -4,6 +4,27 @@
 # Alpha sorted list with default values specified unless otherwise noted in a
 # comment describing the configuration default.
 
+## Laptop Information
+#
+# FQDN of the laptop (required)
+#laptop_hostname: 'freebsd-laptop.local'
+
+## Owner contact information
+#
+# This is used to populate appropriate values throughout the system where
+# *YOUR* email address is needed.
+#owner_email: 'user@example.org'
+
+## smtp default mailhost
+#smtp_relayhost:
+#  - 'mailhost.local'
+#smtp_allowed_outbound_domains:
+#  - 'local'
+#smtp_forward_local_mail_to_owner: true
+
+## sendmail tunables
+#sendmail_enable: false
+
 ## zfSnap tunables
 #zfsnap_hourly_ttl:   '3d'
 #zfsnap_daily_ttl:    '9d'
