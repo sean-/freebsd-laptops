@@ -23,3 +23,17 @@
     force: no
     content: ''
     mode: 0644
+
+- name: /etc/periodic.conf | periodic output
+  lineinfile:
+    dest: /etc/periodic.conf
+    regexp: '^([\s]*)[\#]?([\s]*){{ item }}_output="/var/log/periodic-{{ item }}.log"'
+    line: '{{ item }}_output="/var/log/periodic-{{ item }}.log"'
+    owner: root
+    group: wheel
+    mode: 0644
+  with_items:
+    - hourly
+    - daily
+    - weekly
+    - monthly
