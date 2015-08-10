@@ -5,11 +5,13 @@
 # comment describing the configuration default.
 
 ## zfSnap tunables
-#zfsnap_default_hourly_ttl: '3d'
-#zfsnap_default_daily_ttl: '9d'
-#zfsnap_default_weekly_ttl: '5w'
-#zfsnap_default_monthly_ttl: '6m'
-#zfsnap_default_reboot_ttl: '14d'
+#zfsnap_hourly_ttl:   '3d'
+#zfsnap_daily_ttl:    '9d'
+#zfsnap_weekly_ttl:   '5w'
+#zfsnap_monthly_ttl:  '6m'
+#zfsnap_reboot_ttl:  '14d'
+#zfsnap_verbose:      'NO'
 
-# Must have at least one value in this dict
-_zzz_config_version: '0.1'
+# Add an internal config version. Since we must have at least one value in
+# the YaML dict, use this as the sentinel record.
+config_version: '20150809'
