@@ -9,8 +9,8 @@ Ansible playbooks for automating the setup and use of laptop devices.
 % make apply
 
 # Or if you prefer the full ansible-playbook(1) syntax:
-% ansible-playbook --check -s site.yml -e @config # equivalent to `make plan`
-% ansible-playbook -s site.yml -e @config.yml     # equivalent to `make apply`
+% ansible-playbook --check -s site.yml -e @config.yml # equivalent to `make plan`
+% ansible-playbook         -s site.yml -e @config.yml # equivalent to `make apply`
 ```
 
 ## Customization
