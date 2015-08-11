@@ -1,0 +1,35 @@
+---
+# Defaults for a component are alpha-sorted and delimited by three
+# octothorpes ('#').  Within a component, individual parameters may not be
+# alpha-sorted (sometimes it makes sense to sort by the value or logical
+# meaning of the keys, not the lexical sorting of the keys).
+#
+# Documentation belongs in config.yml.sample.  "Advanced settings" that are
+# not included in config.yml.sample should be documented here.
+
+### Meta Information
+#
+#laptop_hostname: false # no default provided
+#owner_email: 'user@example.org'
+
+### Mail
+opensmtpd_enable: true
+sendmail_enable: false
+#smtp_allowed_outbound_domains: # no default provided
+#  - 'local'
+smtp_forward_local_mail_to_owner: true
+
+### Network
+ipv4_enable: true
+ipv6_enable: false
+
+### zfSnap
+zfsnap_hourly_ttl:   '3d'
+zfsnap_daily_ttl:    '9d'
+zfsnap_weekly_ttl:   '5w'
+zfsnap_monthly_ttl:  '6m'
+zfsnap_reboot_ttl:  '14d'
+
+# Disable verbose snapshots, this generates hourly email.
+zfsnap_verbose: 'YES'
+

@@ -5,19 +5,32 @@
 # comment describing the configuration default. Copy this file to config.yml
 # and tweak accordingly.  It is not recommended to remove unused parameters,
 # instead leave them there so that drift can be easily corrected via diff(1).
+#
+# The list of defaults is available in `defaults/main.yml`.  All
+# roles/*/defaults/main.yml are symlink(2)'ed to the same file that way the
+# system maintains a coherent view of all defaults.
 
-## Laptop Information
+### Meta Information
 #
 # FQDN of the laptop (required)
 #laptop_hostname: 'freebsd-laptop.local'
 
-## Owner contact information
+### Owner contact information
 #
 # This is used to populate appropriate values throughout the system where
 # *YOUR* email address is needed.
 #owner_email: 'user@example.org'
 
-## Preferences
+### Mail
+#opensmtpd_enable: true
+#sendmail_enable: false
+#
+# Domains that we allow to be relayed to a smart host or sent out to the Intenret
+#smtp_allowed_outbound_domains: # no default provided
+#  - 'local'
+#smtp_forward_local_mail_to_owner: true
+
+### Network
 #
 # Enable IPv4 on Laptops
 #ipv4_enable: true
@@ -25,17 +38,7 @@
 # Disbale IPv6 on Laptops (for now)
 #ipv6_enable: false
 
-## smtp default mailhost
-#smtp_relayhost:
-#  - 'mailhost.local'
-#smtp_allowed_outbound_domains:
-#  - 'local'
-#smtp_forward_local_mail_to_owner: true
-
-## sendmail tunables
-#sendmail_enable: false
-
-## zfSnap tunables
+### zfSnap tunables
 #zfsnap_hourly_ttl:   '3d'
 #zfsnap_daily_ttl:    '9d'
 #zfsnap_weekly_ttl:   '5w'

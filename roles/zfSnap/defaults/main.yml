@@ -1,10 +1,1 @@
----
-# zfSnap defaults
-zfsnap_hourly_ttl:   '3d'
-zfsnap_daily_ttl:    '9d'
-zfsnap_weekly_ttl:   '5w'
-zfsnap_monthly_ttl:  '6m'
-zfsnap_reboot_ttl:  '14d'
-
-# Disable verbose snapshots, this generates hourly email.
-zfsnap_verbose: 'YES'
+../../../defaults/main.yml
