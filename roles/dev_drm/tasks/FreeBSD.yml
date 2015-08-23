@@ -25,4 +25,18 @@
     - { k: 'drm.i915.prefault_disable',       v:  '0' }
     - { k: 'drm.i915.semaphores',             v: '-1' }
     - { k: 'drm.i915.try_reset',              v:  '1' }
+#    - { k: 'drm.i915.enable_rc6',             v:  '7' }
+
+# NOTE(seanc@): The following should be removed from loader.conf in order to
+# have suspend/resume work from X11.  Note, suspend/resume doesn't work from
+# non-X11.
+- name: drm2 | /boot/loader.conf | defaults
+  lineinfile:
+    dest: /boot/loader.conf
+    regexp: '^[\s]*[\#]?[\s]*{{ item.k }}([\s]*)='
+    owner: root
+    group: wheel
+    mode: 0644
+    state: absent
+  with_items:
     - { k: 'drm.i915.enable_rc6',             v:  '7' }
