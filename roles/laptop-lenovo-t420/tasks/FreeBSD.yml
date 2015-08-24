@@ -21,6 +21,7 @@
   notify:
     - sysctl restart
 
+# NOTE(seanc@): Need to test if this works before removing state=absent
 - name: /etc/sysctl.conf | hw.acpi.reset_video
   lineinfile:
     dest: /etc/sysctl.conf
@@ -29,6 +30,7 @@
     owner: root
     group: wheel
     mode: 0644
+    state: absent
   notify:
     - sysctl restart
 
@@ -48,7 +50,7 @@
 - name: /etc/sysctl.conf | hw.acpi.sleep_delay
   lineinfile:
     dest: /etc/sysctl.conf
-    regexp: '^([\s]*)[\#]?([\s]*)hw\.acpi\.sleep_delay([\s]*)='
+    regexp: '^[\s]*[\#]?[\s]*hw\.acpi\.sleep_delay[\s]*='
     line: 'hw.acpi.sleep_delay="1"'
     owner: root
     group: wheel
@@ -58,7 +60,7 @@
 
 # NOTE(seanc@): The following options are taken from
 # https://www.banym.de/freebsd/install-freebsd-11-on-thinkpad-t420
-- name: /etc/rc.conf | t420 services
+- name: /etc/rc.conf | T420 services
   sysrc:
     name: "{{ item }}_enable"
     value: "YES"
@@ -84,6 +86,7 @@
   notify:
     - moused restart
 
+# NOTE(seanc@): Need to test if this works before removing state=absent
 - name: /boot/loader.conf | kern.vty
   lineinfile:
     dest: /boot/loader.conf
@@ -92,12 +95,47 @@
     owner: root
     group: wheel
     mode: 0644
+    state: absent
 
 - name: /boot/loader.conf | hw.vga.textmode
   lineinfile:
     dest: /boot/loader.conf
-    regexp: '^([\s]*)[\#]?([\s]*)hw\.vga.textmode([\s]*)='
+    regexp: '^([\s]*)[\#]?([\s]*)hw\.vga\.textmode([\s]*)='
     line: 'hw.vga.textmode="1"'
     owner: root
     group: wheel
     mode: 0644
+
+- name: /etc/sysctl.conf | dev.pcm.0.play.vchans
+  lineinfile:
+    dest: /etc/sysctl.conf
+    regexp: '^[\s]*[\#]?[\s]*dev\.pcm\.0\.play\.vchans[\s]*='
+    line: 'dev.pcm.0.play.vchans="4"'
+    owner: root
+    group: wheel
+    mode: 0644
+  notify:
+    - sysctl restart
+
+- name: /etc/sysctl.conf | dev.pcm.0.rec.vchans
+  lineinfile:
+    dest: /etc/sysctl.conf
+    regexp: '^[\s]*[\#]?[\s]*dev\.pcm\.0\.rec\.vchans[\s]*='
+    line: 'dev.pcm.0.rec.vchans="4"'
+    owner: root
+    group: wheel
+    mode: 0644
+  notify:
+    - sysctl restart
+
+- name: /etc/sysctl.conf | hw.snd.maxautovchans
+  lineinfile:
+    dest: /etc/sysctl.conf
+    regexp: '^[\s]*[\#]?[\s]*hw\.snd\.maxautovchans[\s]*='
+    line: 'hw.snd.maxautovchans="4"'
+    owner: root
+    group: wheel
+    mode: 0644
+  notify:
+    - sysctl restart
+

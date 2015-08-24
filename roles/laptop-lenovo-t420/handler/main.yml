@@ -7,4 +7,3 @@
 
 - name: sysctl restart
   service: name=sysctl state=restarted
-

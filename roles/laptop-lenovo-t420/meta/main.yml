@@ -3,7 +3,7 @@ dependencies:
   - acpi_ibm
   - acpi_video
   - aesni
-  - dev_drm
+  - { role: dev_drm, enable_rc6: False }
   - dev_i915
   - hosts
   - opensmtpd

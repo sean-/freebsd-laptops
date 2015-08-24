@@ -17,4 +17,4 @@
 
 - hosts: local
   roles:
-    - lenovo-t420
+    - laptop-lenovo-t420
